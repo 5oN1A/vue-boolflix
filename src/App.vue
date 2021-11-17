@@ -1,8 +1,11 @@
 <template>
   <div class="container">
+    <Card></Card>
     <div class="searchbar">
       <input v-model="userSearch" type="text" />
-      <button @click="searchQuery()">search</button>
+      <button @click="searchQuery(movieSearch, userSearch, 'moviesList'); searchQuery(seriesSearch, userSearch, 'seriesList')">
+        search
+      </button>
     </div>
 
     <ul>
@@ -12,7 +15,11 @@
           <li>Titolo Originale: {{ movie.original_title }}</li>
           <li>
             Lingua: {{ movie.original_language }}
-            <img :src="require(`@/assets/${movie.original_language}.gif`)" alt="" />
+            <img
+              v-if="filter(movie.original_language)"
+              :src="require(`@/assets/${movie.original_language}.gif`)"
+              alt=""
+            />
           </li>
           <li>Voto: {{ movie.vote_average }}</li>
         </ol>
@@ -23,30 +30,28 @@
 
 <script>
 import axios from "axios";
+import Card from "./components/Card.vue"
 
 export default {
   name: "App",
-  components: {},
+  components: {
+    Card
+  },
   data() {
     return {
       apiKey: "91101de13ecb336e5b615f4754a0341a",
       apiUrl: "https://api.themoviedb.org/3",
+      movieSearch: "/search/movie",
+      seriesSearch: "/search/tv",
       moviesList: [],
       seriesList: [],
-      userSearch: "",
-     /*  langFlags: {
-        de: "de.gif",
-        hu: "hu.gif",
-        fr: "fr.gif",
-        sp: "sp.gif",
-        it: "it.gif",
-        en: "en.gif"
-      }, */
+      userSearch: "scrubs",
+      langFlags: ["de", "hu", "fr", "sp", "it", "en"],
     };
   },
   computed: {},
   methods: {
-    searchQuery() {
+    /* searchQuery(typeSearch, typeList) {
       axios
         .get(this.apiUrl + "/search/movie", {
           params: {
@@ -58,13 +63,33 @@ export default {
         .then((resp) => {
           this.moviesList = resp.data.results;
           this.langCode = this.moviesList.original_language;
-          console.log(this.moviesList);
 
-          console.log(this.langCode);
+        }); */
+    searchQuery(typeSearch, query, typeList) {
+      axios
+        .get(this.apiUrl + typeSearch, {
+          params: {
+            api_key: this.apiKey,
+            query: query,
+            language: "it",
+          },
+        })
+        .then((resp) => {
+          this[typeList] = resp.data.results;
+          console.log(this[typeList]);
         });
     },
+    filter(nationality) {
+      // We can't find 'Taiwan' in nationalityArr
+      return this.langFlags.filter((n) => n === nationality).length === 0
+        ? false
+        : true; // false
+    },
   },
-  mounted() {},
+  mounted() {
+      
+
+  },
 };
 </script>
 
