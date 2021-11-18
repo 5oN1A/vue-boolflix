@@ -1,9 +1,7 @@
 <template>
   <div class="container">
-    <i class="fa fa-star-o"></i>
-    <Nav @search="searchQuery"></Nav>
-    <!-- <div class="searchbar">
-      <input v-model="userSearch" type="text" />
+    <div class="searchbar">
+      <input v-model="userSearch" type="text"/>
       <button
         @click="
           searchQuery(movieSearch, userSearch, 'moviesList');
@@ -12,9 +10,8 @@
       >
         search
       </button>
-    </div> -->
+    </div>
     <div class="cards-container">
-      <Main>:newSearch:"newSearch"</Main>
       <Card
         v-for="movie in moviesList"
         :key="movie.id"
@@ -24,7 +21,6 @@
         :cardVote="movie.vote_average"
         :cardImg="movie.poster_path"
       ></Card>
-      <h1>series</h1>
       <Card
         v-for="serie in seriesList"
         :key="serie.id"
@@ -34,36 +30,34 @@
         :cardVote="serie.vote_average"
         :cardImg="serie.poster_path"
       ></Card>
+
     </div>
   </div>
 </template>
-
 <script>
 import axios from "axios";
 import Card from "./components/Card.vue";
-import Nav from "./components/Nav.vue";
-import Main from './components/Main.vue';
 export default {
   name: "App",
   components: {
-    
-    Nav,
-    Main,
+    Card,
   },
   data() {
     return {
       apiKey: "91101de13ecb336e5b615f4754a0341a",
       apiUrl: "https://api.themoviedb.org/3",
+      movieSearch: "/search/movie",
+      seriesSearch: "/search/tv",
       moviesList: [],
       seriesList: [],
-      newSearch: "",
+      userSearch: "scrubs",
     };
   },
   computed: {},
   methods: {
-    searchQuery(query) {
+    searchQuery(typeSearch, query, typeList) {
       axios
-        .get(this.apiUrl + "/search/movie", {
+        .get(this.apiUrl + typeSearch, {
           params: {
             api_key: this.apiKey,
             query: query,
@@ -71,28 +65,12 @@ export default {
           },
         })
         .then((resp) => {
-          this.movieList = resp.data.results;
-          console.log(this.movieList);
-        });
-      axios
-        .get(this.apiUrl + "/search/tv", {
-          params: {
-            api_key: this.apiKey,
-            query: query,
-            language: "it",
-          },
-        })
-        .then((resp) => {
-          this.serieList = resp.data.results;
-          console.log(this.serieList);
+          this[typeList] = resp.data.results;
+          console.log(this[typeList]);
         });
     },
   },
-  watch: {
-    newSearch: function (newWord) {
-      console.log("filtro cambiato", newWord);
-    },
-  },
+  mounted() {},
 };
 </script>
 

@@ -1,7 +1,5 @@
 <template>
   <ol>
-   <!--  {{startry}}
-    
     <li>Titolo: {{ cardTitle }}</li>
     <li>Titolo Originale: {{ cardOriginalTitle }}</li>
     <li>
@@ -9,12 +7,20 @@
       <img
         v-if="filter(cardLanguage)"
         :src="require(`@/assets/${cardLanguage}.gif`)"
-        :alt="cardLanguage"
+        alt=""
       />
-      <img v-else :src="require(`@/assets/no-flag.png`)" alt="no flag" />
     </li>
-    <li>Voto <span v-for="i in ratingStars" :key="i">
-      {{i}}</span></li>
+    <li>
+      Voto:
+      <div v-if="ratingStars">
+        <span v-for="i in ratingStars" :key="i">
+          <i class="fa fa-star"></i>
+        </span>
+        <span v-for="i in 5 - ratingStars" :key="i">
+          <i class="fa fa-star-o"></i>
+        </span>
+      </div>
+    </li>
     <li>
       Immagine di copertina:
       <img v-if="cardImg" :src="imgPath" :alt="cardTitle" />
@@ -23,7 +29,8 @@
         :src="require(`@/assets/placeholder.jpg`)"
         alt="no image found"
       />
-    </li> -->
+    </li>
+    -->
   </ol>
 </template>
 
@@ -40,10 +47,8 @@ export default {
   data() {
     return {
       langFlags: ["de", "hu", "fr", "sp", "it", "en"],
-      startry: '<i class="fa fa-star"></i>',
     };
   },
-
   computed: {
     imgPath() {
       let url = "https://image.tmdb.org/t/p/";
@@ -54,11 +59,8 @@ export default {
     ratingStars() {
       let voteRating = this.cardVote;
       return Math.ceil(voteRating / 2);
-
-      
     },
   },
-
   methods: {
     filter(nationality) {
       return this.langFlags.filter((n) => n === nationality).length === 0
@@ -66,11 +68,11 @@ export default {
         : true;
     },
   },
-
   mounted() {},
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
+
+
 <style scoped lang="scss">
 </style>
