@@ -14,6 +14,7 @@
       </button>
     </div> -->
     <div class="cards-container">
+      <Main>:newSearch:"newSearch"</Main>
       <Card
         v-for="movie in moviesList"
         :key="movie.id"
@@ -39,14 +40,15 @@
 
 <script>
 import axios from "axios";
-import Card from "./components/Crd.vue";
+import Card from "./components/Card.vue";
 import Nav from "./components/Nav.vue";
-
+import Main from './components/Main.vue';
 export default {
   name: "App",
   components: {
-    Card,
+    
     Nav,
+    Main,
   },
   data() {
     return {
@@ -86,6 +88,11 @@ export default {
         });
     },
   },
+  watch: {
+    newSearch: function (newWord) {
+      console.log("filtro cambiato", newWord);
+    },
+  },
 };
 </script>
 
@@ -104,7 +111,6 @@ export default {
     vertical-align: middle;
   }
 }
-
 l {
   margin-bottom: 20px;
 }
