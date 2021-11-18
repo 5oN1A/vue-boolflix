@@ -1,41 +1,46 @@
 <template>
   <div class="container">
-    <Card></Card>
     <div class="searchbar">
-      <input v-model="userSearch" type="text" />
-      <button @click="searchQuery(movieSearch, userSearch, 'moviesList'); searchQuery(seriesSearch, userSearch, 'seriesList')">
+      <input v-model="userSearch" type="text"/>
+      <button
+        @click="
+          searchQuery(movieSearch, userSearch, 'moviesList');
+          searchQuery(seriesSearch, userSearch, 'seriesList');
+        "
+      >
         search
       </button>
     </div>
+    <div class="cards-container">
+      <Card
+        v-for="movie in moviesList"
+        :key="movie.id"
+        :cardTitle="movie.title"
+        :cardOriginalTitle="movie.original_title"
+        :cardLanguage="movie.original_language"
+        :cardVote="movie.vote_average"
+      ></Card>
+      <Card
+        v-for="serie in seriesList"
+        :key="serie.id"
+        :cardTitle="serie.name"
+        :cardOriginalTitle="serie.original_name"
+        :cardLanguage="serie.original_language"
+        :cardVote="serie.vote_average"
+      ></Card>
 
-    <ul>
-      <li v-for="movie in moviesList" :key="movie.id">
-        <ol>
-          <li>Titolo: {{ movie.title }}</li>
-          <li>Titolo Originale: {{ movie.original_title }}</li>
-          <li>
-            Lingua: {{ movie.original_language }}
-            <img
-              v-if="filter(movie.original_language)"
-              :src="require(`@/assets/${movie.original_language}.gif`)"
-              alt=""
-            />
-          </li>
-          <li>Voto: {{ movie.vote_average }}</li>
-        </ol>
-      </li>
-    </ul>
+    </div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import Card from "./components/Card.vue"
+import Card from "./components/Card.vue";
 
 export default {
   name: "App",
   components: {
-    Card
+    Card,
   },
   data() {
     return {
@@ -46,25 +51,10 @@ export default {
       moviesList: [],
       seriesList: [],
       userSearch: "scrubs",
-      langFlags: ["de", "hu", "fr", "sp", "it", "en"],
     };
   },
   computed: {},
   methods: {
-    /* searchQuery(typeSearch, typeList) {
-      axios
-        .get(this.apiUrl + "/search/movie", {
-          params: {
-            api_key: this.apiKey,
-            query: this.userSearch,
-            language: "it",
-          },
-        })
-        .then((resp) => {
-          this.moviesList = resp.data.results;
-          this.langCode = this.moviesList.original_language;
-
-        }); */
     searchQuery(typeSearch, query, typeList) {
       axios
         .get(this.apiUrl + typeSearch, {
@@ -79,17 +69,8 @@ export default {
           console.log(this[typeList]);
         });
     },
-    filter(nationality) {
-      // We can't find 'Taiwan' in nationalityArr
-      return this.langFlags.filter((n) => n === nationality).length === 0
-        ? false
-        : true; // false
-    },
   },
-  mounted() {
-      
-
-  },
+  mounted() {},
 };
 </script>
 
