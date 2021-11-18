@@ -1,6 +1,8 @@
 <template>
   <div class="container">
-    <div class="searchbar">
+    <i class="fa fa-star-o"></i>
+    <Nav @search="searchQuery"></Nav>
+    <!-- <div class="searchbar">
       <input v-model="userSearch" type="text" />
       <button
         @click="
@@ -10,7 +12,7 @@
       >
         search
       </button>
-    </div>
+    </div> -->
     <div class="cards-container">
       <Card
         v-for="movie in moviesList"
@@ -21,6 +23,7 @@
         :cardVote="movie.vote_average"
         :cardImg="movie.poster_path"
       ></Card>
+      <h1>series</h1>
       <Card
         v-for="serie in seriesList"
         :key="serie.id"
@@ -36,29 +39,29 @@
 
 <script>
 import axios from "axios";
-import Card from "./components/Card.vue";
+import Card from "./components/Crd.vue";
+import Nav from "./components/Nav.vue";
 
 export default {
   name: "App",
   components: {
     Card,
+    Nav,
   },
   data() {
     return {
       apiKey: "91101de13ecb336e5b615f4754a0341a",
       apiUrl: "https://api.themoviedb.org/3",
-      movieSearch: "/search/movie",
-      seriesSearch: "/search/tv",
       moviesList: [],
       seriesList: [],
-      userSearch: "scrubs",
+      newSearch: "",
     };
   },
   computed: {},
   methods: {
-    searchQuery(typeSearch, query, typeList) {
+    searchQuery(query) {
       axios
-        .get(this.apiUrl + typeSearch, {
+        .get(this.apiUrl + "/search/movie", {
           params: {
             api_key: this.apiKey,
             query: query,
@@ -66,12 +69,23 @@ export default {
           },
         })
         .then((resp) => {
-          this[typeList] = resp.data.results;
-          console.log(this[typeList]);
+          this.movieList = resp.data.results;
+          console.log(this.movieList);
+        });
+      axios
+        .get(this.apiUrl + "/search/tv", {
+          params: {
+            api_key: this.apiKey,
+            query: query,
+            language: "it",
+          },
+        })
+        .then((resp) => {
+          this.serieList = resp.data.results;
+          console.log(this.serieList);
         });
     },
   },
-  mounted() {},
 };
 </script>
 
