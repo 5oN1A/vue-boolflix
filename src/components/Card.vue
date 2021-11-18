@@ -11,6 +11,10 @@
       />
     </li>
     <li>Voto: {{ cardVote }}</li>
+    <li>Immagine di copertina:
+      <img :src="'https://image.tmdb.org/t/p/w500' + cardImg" alt="">
+      
+    </li>
   </ol>
 </template>
 
@@ -22,6 +26,7 @@ export default {
     cardOriginalTitle: String,
     cardLanguage: String,
     cardVote: Number,
+    cardImg: String
   },
   data() {
     return {

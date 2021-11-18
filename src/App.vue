@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="searchbar">
-      <input v-model="userSearch" type="text"/>
+      <input v-model="userSearch" type="text" />
       <button
         @click="
           searchQuery(movieSearch, userSearch, 'moviesList');
@@ -19,6 +19,7 @@
         :cardOriginalTitle="movie.original_title"
         :cardLanguage="movie.original_language"
         :cardVote="movie.vote_average"
+        :cardImg="movie.poster_path"
       ></Card>
       <Card
         v-for="serie in seriesList"
@@ -27,8 +28,8 @@
         :cardOriginalTitle="serie.original_name"
         :cardLanguage="serie.original_language"
         :cardVote="serie.vote_average"
+        :cardImg="serie.poster_path"
       ></Card>
-
     </div>
   </div>
 </template>
@@ -75,6 +76,7 @@ export default {
 </script>
 
 <style lang="scss">
+@import "styles/app";
 .searchbar {
   text-align: center;
   input {
