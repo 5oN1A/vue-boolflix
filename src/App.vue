@@ -1,39 +1,62 @@
 <template>
-  <div class="container">
-    <div class="searchbar">
-      <input v-model="userSearch" type="text"/>
-      <button
-        @click="
-          searchQuery(movieSearch, userSearch, 'moviesList');
-          searchQuery(seriesSearch, userSearch, 'seriesList');
-        "
+  <div class="shell">
+    <nav>
+      <div
+        class="container justify-content-between align-items-center d-flex py-3"
       >
-        search
-      </button>
-    </div>
-    <div class="cards-container">
-      <Card
-        v-for="movie in moviesList"
-        :key="movie.id"
-        :cardTitle="movie.title"
-        :cardOriginalTitle="movie.original_title"
-        :cardLanguage="movie.original_language"
-        :cardVote="movie.vote_average"
-        :cardImg="movie.poster_path"
-      ></Card>
-      <Card
-        v-for="serie in seriesList"
-        :key="serie.id"
-        :cardTitle="serie.name"
-        :cardOriginalTitle="serie.original_name"
-        :cardLanguage="serie.original_language"
-        :cardVote="serie.vote_average"
-        :cardImg="serie.poster_path"
-      ></Card>
+        <div class="logo">BOOLFLIX</div>
+        <div class="searchbar">
+          <input class="align-middle" v-model="userSearch" type="text" />
+          <button
+            class="btn btn-danger ms-3 align-middle"
+            @click="
+              searchQuery(movieSearch, userSearch, 'moviesList');
+              searchQuery(seriesSearch, userSearch, 'seriesList');
+            "
+          >
+            search
+          </button>
+        </div>
+      </div>
+    </nav>
 
-    </div>
+    <main>
+      <div class="container">
+        <h1 v-if="moviesList.length > 1">Film</h1>
+
+        <div class="d-flex flex-wrap">
+          <Card
+            v-for="movie in moviesList"
+            :key="movie.id"
+            :cardTitle="movie.title"
+            :cardOriginalTitle="movie.original_title"
+            :cardLanguage="movie.original_language"
+            :cardVote="movie.vote_average"
+            :cardOverview="movie.overview"
+            :cardImg="movie.poster_path"
+          ></Card>
+        </div>
+        <h1 v-if="seriesList.length > 1">Series</h1>
+
+        <div class="d-flex flex-wrap">
+          <Card
+            v-for="serie in seriesList"
+            :key="serie.id"
+            :cardTitle="serie.name"
+            :cardOriginalTitle="serie.original_name"
+            :cardLanguage="serie.original_language"
+            :cardVote="serie.vote_average"
+            :cardOverview="serie.overview"
+            :cardImg="serie.poster_path"
+          ></Card>
+        </div>
+      </div>
+    </main>
   </div>
 </template>
+
+
+
 <script>
 import axios from "axios";
 import Card from "./components/Card.vue";
@@ -50,7 +73,7 @@ export default {
       seriesSearch: "/search/tv",
       moviesList: [],
       seriesList: [],
-      userSearch: "scrubs",
+      userSearch: "apocalipse",
     };
   },
   computed: {},
@@ -75,21 +98,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import "styles/app";
-.searchbar {
-  text-align: center;
-  input {
-    width: 300px;
-    height: 30px;
-    vertical-align: middle;
-  }
-  button {
-    width: 50px;
-    height: 30px;
-    vertical-align: middle;
-  }
-}
-l {
-  margin-bottom: 20px;
-}
+@import "styles/App";
 </style>

@@ -1,37 +1,47 @@
 <template>
-  <ol>
-    <li>Titolo: {{ cardTitle }}</li>
-    <li>Titolo Originale: {{ cardOriginalTitle }}</li>
-    <li>
-      Lingua: {{ cardLanguage }}
-      <img
-        v-if="filter(cardLanguage)"
-        :src="require(`@/assets/${cardLanguage}.gif`)"
-        alt=""
-      />
-    </li>
-    <li>
-      Voto:
-      <div v-if="ratingStars">
-        <span v-for="i in ratingStars" :key="i">
-          <i class="fa fa-star"></i>
-        </span>
-        <span v-for="i in 5 - ratingStars" :key="i">
-          <i class="fa fa-star-o"></i>
-        </span>
+  <div class="my-col">
+    <div class="card">
+        <img class="card-img" v-if="cardImg" :src="imgPath" :alt="cardTitle" />
+        <img
+          v-else
+          :src="require(`@/assets/placeholder.jpg`)"
+          alt="no image found"
+        />
+      <div class="overlay">
+        <ul>
+        <li>
+          <h3 class="mb-3">{{ cardOriginalTitle }}</h3>
+        </li>
+        <li v-if="cardOriginalTitle != cardTitle">
+          <h4 class="mb-3">{{ cardTitle }}</h4>
+        </li>
+        <li>
+          <img
+            v-if="filter(cardLanguage)"
+            class="flag-img mb-3"
+            :src="require(`@/assets/${cardLanguage}.gif`)"
+            :alt="cardTitle"
+          />
+          <p v-else>{{ cardLanguage }}</p>
+        </li>
+        <li>
+          <div v-if="ratingStars">
+            <i
+              v-for="num in 5"
+              :key="'vote_star_' + num"
+              class="fa mb-2"
+              :class="num <= ratingStars ? 'fa-star' : 'fa-star-o'"
+            ></i>
+          </div>
+        </li>
+        <li>
+          <h4 v-if="cardOverview">Trama</h4>
+          <p>{{ cardOverview }}</p>
+        </li>
+        </ul>
       </div>
-    </li>
-    <li>
-      Immagine di copertina:
-      <img v-if="cardImg" :src="imgPath" :alt="cardTitle" />
-      <img
-        v-else
-        :src="require(`@/assets/placeholder.jpg`)"
-        alt="no image found"
-      />
-    </li>
-    -->
-  </ol>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -42,6 +52,7 @@ export default {
     cardOriginalTitle: String,
     cardLanguage: String,
     cardVote: Number,
+    cardOverview: String,
     cardImg: String,
   },
   data() {
