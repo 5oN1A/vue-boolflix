@@ -1,28 +1,10 @@
 <template>
   <div class="shell">
-    <nav>
-      <div
-        class="container justify-content-between align-items-center d-flex py-3"
-      >
-        <div class="logo">BOOLFLIX</div>
-        <div class="searchbar">
-          <input class="align-middle" v-model="userSearch" type="text" />
-          <button
-            class="btn btn-danger ms-3 align-middle"
-            @click="
-              searchQuery(movieSearch, userSearch, 'moviesList');
-              searchQuery(seriesSearch, userSearch, 'seriesList');
-            "
-          >
-            search
-          </button>
-        </div>
-      </div>
-    </nav>
+    <Header @search="searchQuery"></Header>
 
     <main>
       <div class="container">
-        <h1 v-if="moviesList.length > 1">Film</h1>
+        <h1 v-if="moviesList.length > 0">Film</h1>
 
         <div class="d-flex flex-wrap">
           <Card
@@ -36,7 +18,7 @@
             :cardImg="movie.poster_path"
           ></Card>
         </div>
-        <h1 v-if="seriesList.length > 1">Series</h1>
+        <h1 v-if="seriesList.length > 0">Series</h1>
 
         <div class="d-flex flex-wrap">
           <Card
@@ -60,27 +42,27 @@
 <script>
 import axios from "axios";
 import Card from "./components/Card.vue";
+import Header from "./components/Header.vue";
 export default {
   name: "App",
   components: {
     Card,
+    Header,
   },
   data() {
     return {
       apiKey: "91101de13ecb336e5b615f4754a0341a",
       apiUrl: "https://api.themoviedb.org/3",
-      movieSearch: "/search/movie",
-      seriesSearch: "/search/tv",
       moviesList: [],
       seriesList: [],
-      userSearch: "apocalipse",
+     
     };
   },
   computed: {},
   methods: {
-    searchQuery(typeSearch, query, typeList) {
+    searchQuery(query) {
       axios
-        .get(this.apiUrl + typeSearch, {
+        .get(this.apiUrl + "/search/movie", {
           params: {
             api_key: this.apiKey,
             query: query,
@@ -88,8 +70,20 @@ export default {
           },
         })
         .then((resp) => {
-          this[typeList] = resp.data.results;
-          console.log(this[typeList]);
+           this.moviesList = resp.data.results;
+          console.log(this.moviesList);
+        });
+      axios
+        .get(this.apiUrl + "/search/tv", {
+          params: {
+            api_key: this.apiKey,
+            query: query,
+            language: "it",
+          },
+        })
+        .then((resp) => {
+          this.seriesList = resp.data.results;
+          console.log(this.seriesList);
         });
     },
   },
