@@ -6,8 +6,8 @@
     >
       <div class="logo">BOOLFLIX</div>
       <div class="searchbar">
-      <input v-model="userSearch" type="text" />
-      <button class="btn btn-danger" @click="$emit('search', userSearch)">search</button>
+      <input class="align-middle" v-model="userSearch" type="text" />
+      <button class="btn btn-danger align-middle" @click="$emit('search', userSearch)">search</button>
       </div>
     </div>
   </nav>
@@ -15,6 +15,7 @@
 </template>
 
 <script>
+
 export default {
   name: "Header",
   data() {
